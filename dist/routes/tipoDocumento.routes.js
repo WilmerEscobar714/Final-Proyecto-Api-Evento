@@ -1,0 +1,10 @@
+"use strict";
+// import express, {Router} from 'express';
+// import { insertarTipoDocumento, listarTipoDocumento, obtenerTipoDocumento,modificarTipoDocumento,eliminarTipoDocumento } from '../controllers/tipoDocumento.Controller';
+// const router: Router = express.Router();
+// router.get('/',listarTipoDocumento);
+// router.post('/', insertarTipoDocumento);
+// router.get('/:id', obtenerTipoDocumento);
+// router.put('/:id', modificarTipoDocumento);
+// router.delete('/:id', eliminarTipoDocumento);
+// export default router;

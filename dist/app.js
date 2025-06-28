@@ -6,7 +6,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-//import TipoDocumentoroutes from './routes/tipoDocumento.routes';
 const env_1 = __importDefault(require("./config/env"));
 const categorias_routes_1 = __importDefault(require("./routes/categorias.routes"));
 const eventos_routes_1 = __importDefault(require("./routes/eventos.routes"));

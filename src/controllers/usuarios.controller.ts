@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ResponseModel } from "../shared/resposeModel";
-import { STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
+import { STATUS_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
 import * as usuariosService from "../services/usuarios.service";
+import { usuariosCrearSchema } from "../schemas/usuariosSchema";
 
 
 export const listarUsuarios = async (req: Request, res: Response) => {
@@ -27,8 +28,14 @@ export const obtenerUsuarios = async (req: Request, res: Response) => {
     }
 }
 
-export const insertarUsuarios = async (req: Request, res: Response) => {
+export const insertarUsuarios = async (req: Request, res: Response) : Promise<any>  =>{
     console.log("Insertando nuevo usuario...");
+
+    const {error}:any = usuariosCrearSchema.validate(req.body);
+    if (error) {
+         return res.status(STATUS_BAD_REQUEST).json(ResponseModel.error(error.message, STATUS_BAD_REQUEST));
+    }
+
     try {
         const usuarioCreado = await usuariosService.insertarUsuarios(req.body);
         res.status(201).json(ResponseModel.success(usuarioCreado));

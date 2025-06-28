@@ -8,68 +8,75 @@ datasource db {
 }
 
 model asistencias {
-  id_asistencia    Int       @id @default(autoincrement())
-  id_evento        Int
-  id_usuario       Int
-  nombres          String    @db.VarChar(100)
-  apellidos        String    @db.VarChar(100)
-  correo           String    @db.VarChar(100)
-  dni              String    @db.Char(8)
-  telefono         String    @db.Char(9)
-  asistio          String?   @default("0") @db.Char(1)
-  estado_auditoria String?   @default("1") @db.Char(1)
-  fecha_registro   DateTime? @default(now()) @db.Timestamp(6)
-  eventos          eventos   @relation(fields: [id_evento], references: [id_evento], onDelete: NoAction, onUpdate: NoAction)
-  usuarios         usuarios  @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+  id_asistencia       Int       @id @default(autoincrement())
+  id_evento           Int
+  id_usuario          Int
+  nombres             String    @db.VarChar(100)
+  apellidos           String    @db.VarChar(100)
+  correo              String    @db.VarChar(100)
+  dni                 String    @db.Char(8)
+  telefono            String    @db.Char(9)
+  asistio             String?   @default("0") @db.Char(1)
+  estado_auditoria    String?   @default("1") @db.Char(1)
+  fecha_registro      DateTime? @default(now()) @db.Timestamp(6)
+  fecha_actualizacion DateTime? @db.Timestamp(6)
+  eventos             eventos   @relation(fields: [id_evento], references: [id_evento], onDelete: NoAction, onUpdate: NoAction)
+  usuarios            usuarios  @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model categorias {
-  id_categoria     Int       @id @default(autoincrement())
-  nombre           String    @db.VarChar(100)
-  estado_auditoria String?   @default("1") @db.Char(1)
-  fecha_creacion   DateTime? @default(now()) @db.Timestamp(6)
-  eventos          eventos[]
+  id_categoria        Int       @id @default(autoincrement())
+  nombre              String    @db.VarChar(100)
+  estado_auditoria    String?   @default("1") @db.Char(1)
+  fecha_creacion      DateTime? @default(now()) @db.Timestamp(6)
+  fecha_actualizacion DateTime? @db.Timestamp(6)
+  eventos             eventos[]
 }
 
 model eventos {
-  id_evento           Int           @id @default(autoincrement())
-  id_categoria        Int
-  nombre              String        @db.VarChar(100)
-  descripcion         String        @db.VarChar(100)
-  lugar               String        @db.VarChar(100)
-  fecha               DateTime      @db.Date
-  hora                DateTime      @db.Time(6)
-  estado_auditoria    String?       @default("1") @db.Char(1)
-  fecha_creacion      DateTime?     @default(now()) @db.Timestamp(6)
-  fecha_actualizacion DateTime?     @db.Timestamp(6)
-  asistencias         asistencias[]
-  categorias          categorias    @relation(fields: [id_categoria], references: [id_categoria], onDelete: NoAction, onUpdate: NoAction)
-  pagos               pagos[]
+  id_evento                            Int           @id @default(autoincrement())
+  id_categoria                         Int
+  nombre                               String        @db.VarChar(100)
+  descripcion                          String        @db.VarChar(100)
+  lugar                                String        @db.VarChar(100)
+  fecha                                DateTime      @db.Date
+  hora                                 DateTime      @db.Time(6)
+  estado_auditoria                     String?       @default("1") @db.Char(1)
+  fecha_creacion                       DateTime?     @default(now()) @db.Timestamp(6)
+  fecha_actualizacion                  DateTime?     @db.Timestamp(6)
+  asistencias                          asistencias[]
+  categorias                           categorias    @relation(fields: [id_categoria], references: [id_categoria], onDelete: NoAction, onUpdate: NoAction)
+  pagos                                pagos[]
+  usuarios_usuarios_id_eventoToeventos usuarios[]    @relation("usuarios_id_eventoToeventos")
 }
 
 model usuarios {
-  id_usuario       Int           @id @default(autoincrement())
-  nombre           String        @db.VarChar(100)
-  apellidos        String        @db.VarChar(100)
-  correo           String        @db.VarChar(100)
-  dni              String        @db.Char(8)
-  estado_auditoria String?       @default("1") @db.Char(1)
-  fecha_creacion   DateTime?     @default(now()) @db.Timestamp(6)
-  asistencias      asistencias[]
-  pagos            pagos[]
+  id_usuario                          Int           @id @default(autoincrement())
+  nombre                              String        @db.VarChar(100)
+  apellidos                           String        @db.VarChar(100)
+  correo                              String        @db.VarChar(100)
+  dni                                 String        @db.Char(8)
+  estado_auditoria                    String?       @default("1") @db.Char(1)
+  fecha_creacion                      DateTime?     @default(now()) @db.Timestamp(6)
+  fecha_actualizacion                 DateTime?     @db.Timestamp(6)
+  id_evento                           Int
+  asistencias                         asistencias[]
+  pagos                               pagos[]
+  eventos_usuarios_id_eventoToeventos eventos       @relation("usuarios_id_eventoToeventos", fields: [id_evento], references: [id_evento], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_evento")
 }
 
 model pagos {
-  id_pago          Int               @id @default(autoincrement())
-  id_evento        Int
-  id_usuario       Int
-  monto            Decimal           @db.Decimal(10, 2)
-  fecha_pago       DateTime?         @default(now()) @db.Timestamp(6)
-  metodo_pago      metodo_pago_enum
-  estado           estado_pago_enum? @default(pendiente)
-  estado_auditoria String?           @default("1") @db.Char(1)
-  eventos          eventos           @relation(fields: [id_evento], references: [id_evento], onDelete: NoAction, onUpdate: NoAction)
-  usuarios         usuarios          @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+  id_pago             Int               @id @default(autoincrement())
+  id_evento           Int
+  id_usuario          Int
+  monto               Decimal           @db.Decimal(10, 2)
+  fecha_pago          DateTime?         @default(now()) @db.Timestamp(6)
+  metodo_pago         metodo_pago_enum
+  estado              estado_pago_enum? @default(pendiente)
+  estado_auditoria    String?           @default("1") @db.Char(1)
+  fecha_actualizacion DateTime?         @db.Timestamp(6)
+  eventos             eventos           @relation(fields: [id_evento], references: [id_evento], onDelete: NoAction, onUpdate: NoAction)
+  usuarios            usuarios          @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum estado_pago_enum {

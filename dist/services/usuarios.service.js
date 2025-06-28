@@ -12,10 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarUsuarios = exports.modificarUsuarios = exports.insertarUsuarios = exports.obtenerUsuarios = exports.listarUsuarios = void 0;
 const client_1 = require("@prisma/client");
 const constants_1 = require("../shared/constants");
+const usuarios_mapper_1 = require("../mappers/usuarios.mapper");
 const prisma = new client_1.PrismaClient();
 const listarUsuarios = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando usuarios");
-    return yield prisma.usuarios.findMany({
+    const usuarios = yield prisma.usuarios.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -23,6 +24,7 @@ const listarUsuarios = () => __awaiter(void 0, void 0, void 0, function* () {
             id_usuario: 'asc'
         }
     });
+    return usuarios.map((usuario) => (0, usuarios_mapper_1.fromPrismaUsuario)(usuario));
 });
 exports.listarUsuarios = listarUsuarios;
 const obtenerUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,34 +34,25 @@ const obtenerUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () {
             id_usuario: id
         }
     });
-    return usuario;
+    return usuario ? (0, usuarios_mapper_1.fromPrismaUsuario)(usuario) : null;
 });
 exports.obtenerUsuarios = obtenerUsuarios;
 const insertarUsuarios = (usuario) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo usuario");
     yield prisma.usuarios.create({
-        data: {
-            nombre: usuario.nombre,
-            apellidos: usuario.apellidos,
-            correo: usuario.correo,
-            dni: usuario.dni
-        }
+        data: (0, usuarios_mapper_1.toPrismaUsuario)(usuario)
     });
     return constants_1.RESPONSE_INSERT_OK;
 });
 exports.insertarUsuarios = insertarUsuarios;
 const modificarUsuarios = (id, usuario) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando usuario");
+    const usuarioActualizado = Object.assign({}, usuario);
     yield prisma.usuarios.update({
         where: {
             id_usuario: id
         },
-        data: {
-            nombre: usuario.nombre,
-            apellidos: usuario.apellidos,
-            correo: usuario.correo,
-            dni: usuario.dni
-        }
+        data: (0, usuarios_mapper_1.toPrismaUsuario)(usuarioActualizado)
     });
     return constants_1.RESPONSE_UPDATE_OK;
 });

@@ -46,6 +46,7 @@ exports.eliminarCategorias = exports.modificarCategorias = exports.insertarCateg
 const resposeModel_1 = require("../shared/resposeModel");
 const constants_1 = require("../shared/constants");
 const categoriasService = __importStar(require("../services/categorias.service"));
+const categoriasSchema_1 = require("../schemas/categoriasSchema");
 const listarCategorias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando categorias...");
     try {
@@ -73,6 +74,10 @@ const obtenerCategorias = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.obtenerCategorias = obtenerCategorias;
 const insertarCategorias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nueva categoria...");
+    const { error } = categoriasSchema_1.categoriasCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error(error.message, constants_1.STATUS_BAD_REQUEST));
+    }
     try {
         const categoriaCreada = yield categoriasService.insertarCategorias(req.body);
         res.status(201).json(resposeModel_1.ResponseModel.success(categoriaCreada));

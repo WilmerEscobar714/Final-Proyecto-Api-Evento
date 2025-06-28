@@ -12,11 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarCategorias = exports.modificarCategorias = exports.insertarCategorias = exports.obtenerCategorias = exports.listarCategorias = void 0;
 const client_1 = require("@prisma/client");
 const constants_1 = require("../shared/constants");
+const categorias_mapper_1 = require("../mappers/categorias.mapper");
 const prisma = new client_1.PrismaClient();
 const listarCategorias = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando categorias");
     ;
-    return yield prisma.categorias.findMany({
+    const categorias = yield prisma.categorias.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -24,6 +25,7 @@ const listarCategorias = () => __awaiter(void 0, void 0, void 0, function* () {
             id_categoria: 'asc'
         }
     });
+    return categorias.map((categoria) => (0, categorias_mapper_1.fromPrismaCategoria)(categoria));
 });
 exports.listarCategorias = listarCategorias;
 const obtenerCategorias = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,28 +35,25 @@ const obtenerCategorias = (id) => __awaiter(void 0, void 0, void 0, function* ()
             id_categoria: id
         }
     });
-    return categoria;
+    return categoria ? (0, categorias_mapper_1.fromPrismaCategoria)(categoria) : null;
 });
 exports.obtenerCategorias = obtenerCategorias;
 const insertarCategorias = (categoria) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nueva categoria");
     yield prisma.categorias.create({
-        data: {
-            nombre: categoria.nombre
-        }
+        data: (0, categorias_mapper_1.toPrismaCategoria)(categoria)
     });
     return constants_1.RESPONSE_INSERT_OK;
 });
 exports.insertarCategorias = insertarCategorias;
 const modificarCategorias = (id, categoria) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando categoria");
+    const dataActualizada = Object.assign({}, categoria);
     yield prisma.categorias.update({
         where: {
             id_categoria: id
         },
-        data: {
-            nombre: categoria.nombre
-        }
+        data: (0, categorias_mapper_1.toPrismaCategoria)(dataActualizada)
     });
     return constants_1.RESPONSE_UPDATE_OK;
 });

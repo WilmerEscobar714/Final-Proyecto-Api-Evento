@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ResponseModel } from "../shared/resposeModel";
-import { STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
+import { STATUS_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
 import * as categoriasService from "../services/categorias.service";
+import { categoriasCrearSchema } from "../schemas/categoriasSchema";
 
 export const listarCategorias = async (req: Request, res: Response) => {
     console.log("Listando categorias...");
@@ -26,8 +27,12 @@ export const obtenerCategorias = async (req: Request, res: Response) => {
     }
 }
 
-export const insertarCategorias = async (req: Request, res: Response) => {
+export const insertarCategorias = async (req: Request, res: Response): Promise<any>  => {
     console.log("Insertando nueva categoria...");
+    const {error}: any= categoriasCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(STATUS_BAD_REQUEST).json(ResponseModel.error(error.message, STATUS_BAD_REQUEST));
+    }
     try {
         const categoriaCreada = await categoriasService.insertarCategorias(req.body);
         res.status(201).json(ResponseModel.success(categoriaCreada));

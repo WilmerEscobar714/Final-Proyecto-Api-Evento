@@ -1,6 +1,7 @@
 export interface Categoria {
-  id_categoria: number;
+  idCategoria: number;
   nombre: string;
-  estado_auditoria?: string;
-  fecha_creacion?: Date;
+  estadoAuditoria?: string ;
+  fechaCreacion?: Date ;
+  fechaActualizacion?: Date ;
 }

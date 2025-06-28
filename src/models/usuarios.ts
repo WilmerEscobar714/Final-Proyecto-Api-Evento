@@ -1,9 +1,11 @@
 export interface Usuario {
-    id_usuario: number;
+    idUsuario: number;
+    idEvento: number;
     nombre: string;
     apellidos: string;
     correo: string;
     dni: string;
-    estado_auditoria?: string;
-    fecha_creacion?: Date;
+    estadoAuditoria?: string;
+    fechaCreacion?: Date;
+    fechaActualizacion?: Date;
 }

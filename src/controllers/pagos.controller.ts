@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ResponseModel } from "../shared/resposeModel";
-import { STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
+import { STATUS_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
 import * as pagosService from "../services/pagos.service";
+import { pagosCrearSchema } from "../schemas/pagosSchema";
 
 export const listarPagos = async (req: Request, res: Response) => {
     console.log("Listando pagos...");
@@ -26,8 +27,12 @@ export const obtenerPagos = async (req: Request, res: Response) => {
     }
 };
 
-export const insertarPagos = async (req: Request, res: Response) => {
+export const insertarPagos = async (req: Request, res: Response) : Promise<any>  => {
     console.log("Insertando nuevo pago...");
+     const { error }: any = pagosCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(STATUS_BAD_REQUEST).json(ResponseModel.error(error.message, STATUS_BAD_REQUEST));
+    }
     try {
         const pagoCreado = await pagosService.insertarPagos(req.body);
         res.status(201).json(ResponseModel.success(pagoCreado));

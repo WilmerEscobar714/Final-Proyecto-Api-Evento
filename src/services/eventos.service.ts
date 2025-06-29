@@ -1,12 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { eventos, PrismaClient } from "@prisma/client";
 import { RESPONSE_INSERT_OK, RESPONSE_UPDATE_OK,RESPONSE_DELETE_OK } from "../shared/constants";
 import { Evento } from "../models/eventos";
+import { fromPrismaEventos, toPrismaEventos } from "../mappers/eventos.mapper";
 
 const prisma = new PrismaClient();
 
 export const listarEventos = async () => {
     console.log("Listando eventos");
-    return await prisma.eventos.findMany({
+    const eventos:eventos[] = await prisma.eventos.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -14,47 +15,35 @@ export const listarEventos = async () => {
             id_evento: 'asc'
         }
     });
+    return eventos.map((evento:eventos) => fromPrismaEventos(evento)); 
 };
 
 export const obtenerEventos = async (id: number) => {
     console.log("Obteniendo evento por ID");
-    const evento = await prisma.eventos.findUnique({
+    const evento:eventos | null = await prisma.eventos.findUnique({
         where: {
             id_evento: id
         }
     });
-    return evento;
+    return evento ? fromPrismaEventos(evento) : null;
 };
 
 export const insertarEventos = async (evento: Evento) => {
     console.log("Insertando nuevo evento");
     await prisma.eventos.create({
-        data: {
-            id_categoria: evento.id_categoria,
-            nombre: evento.nombre,
-            descripcion: evento.descripcion,
-            lugar: evento.lugar,
-            fecha: evento.fecha,
-            hora: evento.hora
-        }
+        data: toPrismaEventos(evento)
     });
     return RESPONSE_INSERT_OK;
 };
 
 export const modificarEventos = async (id: number, evento: Evento) => {
     console.log("Modificando evento");
+    const eventoActualizado={...evento}
     await prisma.eventos.update({
         where: {
             id_evento: id
         },
-        data: {
-            id_categoria: evento.id_categoria,
-            nombre: evento.nombre,
-            descripcion: evento.descripcion,
-            lugar: evento.lugar,
-            fecha: evento.fecha,
-            hora: evento.hora
-        }
+        data: toPrismaEventos(eventoActualizado)
     });
     return RESPONSE_UPDATE_OK;
 };

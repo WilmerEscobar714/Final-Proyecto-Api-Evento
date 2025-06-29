@@ -12,10 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarPagos = exports.modificarPagos = exports.insertarPagos = exports.obtenerPagos = exports.listarPagos = void 0;
 const client_1 = require("@prisma/client");
 const constants_1 = require("../shared/constants");
+const pagos_mapper_1 = require("../mappers/pagos.mapper");
 const prisma = new client_1.PrismaClient();
 const listarPagos = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando pagos");
-    return yield prisma.pagos.findMany({
+    const pago = yield prisma.pagos.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -23,6 +24,7 @@ const listarPagos = () => __awaiter(void 0, void 0, void 0, function* () {
             id_pago: 'asc'
         }
     });
+    return pago.map((pagos) => (0, pagos_mapper_1.fromPrismaPagos)(pagos));
 });
 exports.listarPagos = listarPagos;
 const obtenerPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,34 +34,25 @@ const obtenerPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
             id_pago: id
         }
     });
-    return pago;
+    return pago ? (0, pagos_mapper_1.fromPrismaPagos)(pago) : null;
 });
 exports.obtenerPagos = obtenerPagos;
 const insertarPagos = (pago) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo pago");
     yield prisma.pagos.create({
-        data: {
-            id_evento: pago.id_evento,
-            id_usuario: pago.id_usuario,
-            monto: pago.monto,
-            metodo_pago: pago.metodo_pago
-        }
+        data: (0, pagos_mapper_1.toPrismaPagos)(pago)
     });
     return constants_1.RESPONSE_INSERT_OK;
 });
 exports.insertarPagos = insertarPagos;
 const modificarPagos = (id, pago) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando pago");
+    const pagoActualizado = Object.assign({}, pago);
     yield prisma.pagos.update({
         where: {
             id_pago: id
         },
-        data: {
-            id_evento: pago.id_evento,
-            id_usuario: pago.id_usuario,
-            monto: pago.monto,
-            metodo_pago: pago.metodo_pago
-        }
+        data: (0, pagos_mapper_1.toPrismaPagos)(pagoActualizado)
     });
     return constants_1.RESPONSE_UPDATE_OK;
 });

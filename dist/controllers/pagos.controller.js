@@ -46,6 +46,7 @@ exports.eliminarPagos = exports.modificarPagos = exports.insertarPagos = exports
 const resposeModel_1 = require("../shared/resposeModel");
 const constants_1 = require("../shared/constants");
 const pagosService = __importStar(require("../services/pagos.service"));
+const pagosSchema_1 = require("../schemas/pagosSchema");
 const listarPagos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando pagos...");
     try {
@@ -73,6 +74,10 @@ const obtenerPagos = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.obtenerPagos = obtenerPagos;
 const insertarPagos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo pago...");
+    const { error } = pagosSchema_1.pagosCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error(error.message, constants_1.STATUS_BAD_REQUEST));
+    }
     try {
         const pagoCreado = yield pagosService.insertarPagos(req.body);
         res.status(201).json(resposeModel_1.ResponseModel.success(pagoCreado));

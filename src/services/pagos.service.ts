@@ -1,12 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { pagos, PrismaClient } from "@prisma/client";
 import { Pago } from "../models/pagos";
 import { RESPONSE_INSERT_OK, RESPONSE_UPDATE_OK,RESPONSE_DELETE_OK } from "../shared/constants";
+import { fromPrismaPagos, toPrismaPagos } from '../mappers/pagos.mapper';
 
 const prisma = new PrismaClient();
 
 export const listarPagos = async () => {
     console.log("Listando pagos");
-    return await prisma.pagos.findMany({
+    const pago:pagos[] = await prisma.pagos.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -14,43 +15,35 @@ export const listarPagos = async () => {
             id_pago: 'asc'
         }
     });
+    return pago.map((pagos: pagos) => fromPrismaPagos(pagos));
 };
 
 export const obtenerPagos = async (id: number) => {
     console.log("Obteniendo pago por ID");
-    const pago = await prisma.pagos.findUnique({
+    const pago:pagos | null = await prisma.pagos.findUnique({
         where: {
             id_pago: id
         }
     });
-    return pago;
+    return pago ? fromPrismaPagos(pago): null;
 };
 
 export const insertarPagos = async (pago: Pago) => {
     console.log("Insertando nuevo pago");
     await prisma.pagos.create({
-        data: {
-            id_evento: pago.id_evento,
-            id_usuario: pago.id_usuario,
-            monto: pago.monto,
-            metodo_pago: pago.metodo_pago
-        }
+        data: toPrismaPagos(pago)
     });
     return RESPONSE_INSERT_OK;
 };
 
 export const modificarPagos = async (id: number, pago: Pago) => {
     console.log("Modificando pago");
+    const pagoActualizado ={...pago}
     await prisma.pagos.update({
         where: {
             id_pago: id
         },
-        data: {
-            id_evento: pago.id_evento,
-            id_usuario: pago.id_usuario,
-            monto: pago.monto,
-            metodo_pago: pago.metodo_pago
-        }
+        data: toPrismaPagos(pagoActualizado)
     });
     return RESPONSE_UPDATE_OK;
 };

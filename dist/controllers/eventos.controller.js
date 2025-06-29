@@ -46,6 +46,7 @@ exports.eliminarEventos = exports.modificarEventos = exports.insertarEventos = e
 const resposeModel_1 = require("../shared/resposeModel");
 const constants_1 = require("../shared/constants");
 const eventosService = __importStar(require("../services/eventos.service"));
+const eventosSchema_1 = require("../schemas/eventosSchema");
 const listarEventos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando eventos...");
     try {
@@ -73,6 +74,10 @@ const obtenerEventos = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.obtenerEventos = obtenerEventos;
 const insertarEventos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo evento...");
+    const { error } = eventosSchema_1.eventosCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error(error.message, constants_1.STATUS_BAD_REQUEST));
+    }
     try {
         const eventoCreado = yield eventosService.insertarEventos(req.body);
         res.status(201).json(resposeModel_1.ResponseModel.success(eventoCreado));

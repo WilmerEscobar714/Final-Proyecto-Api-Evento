@@ -46,6 +46,7 @@ exports.eliminarAsistencias = exports.modificarAsistencias = exports.insertarAsi
 const resposeModel_1 = require("../shared/resposeModel");
 const constants_1 = require("../shared/constants");
 const eventosService = __importStar(require("../services/asistencias.service"));
+const asistenciasSchema_1 = require("../schemas/asistenciasSchema");
 const listarAsistencias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando asistencias...");
     try {
@@ -73,6 +74,10 @@ const obtenerAsistencias = (req, res) => __awaiter(void 0, void 0, void 0, funct
 exports.obtenerAsistencias = obtenerAsistencias;
 const insertarAsistencias = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nueva asistencia...");
+    const { error } = asistenciasSchema_1.asistenciasCrearSchema.validate(req.body);
+    if (error) {
+        return res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error(error.message, constants_1.STATUS_BAD_REQUEST));
+    }
     try {
         const asistenciaCreada = yield eventosService.insertarAsistencias(req.body);
         res.status(201).json(resposeModel_1.ResponseModel.success(asistenciaCreada));

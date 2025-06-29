@@ -21,6 +21,7 @@ export const toPrismaPagos = (pago:Pago)=>{
         id_evento:pago.idEvento,
         id_usuario:pago.idUsuario,
         monto:pago.monto,
-        metodo_pago:pago.metodoPago
+        metodo_pago:pago.metodoPago,
+        estado:pago.estado
     }
 }

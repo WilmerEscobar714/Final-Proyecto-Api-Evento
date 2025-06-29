@@ -27,10 +27,11 @@ export const usuariosCrearSchema = Joi.object({
         "string.empty": "El correo no puede estar vacío.",
         "string.email": "El correo debe ser un email válido."
         }),
-        dni: Joi.string().length(8).required()
+        dni: Joi.string().length(8).pattern(/^\d{8}$/).required() // Exactamente 8 dígitos numéricos
         .messages({
-        'any.required': 'El DNI es obligatorio.',
-        "string.empty": "El DNI no puede estar vacío.", 
-        "string.length": "El DNI debe tener exactamente 8 caracteres."
+            'any.required': 'El DNI es obligatorio.',
+            'string.empty': 'El DNI no puede estar vacío.',
+            'string.length': 'El DNI debe tener exactamente 8 caracteres.',
+            'string.pattern.base': 'El DNI debe contener solo números.'
         }),
     });

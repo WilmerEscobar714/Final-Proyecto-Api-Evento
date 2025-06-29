@@ -1,0 +1,49 @@
+import Joi from "joi";
+
+export const asistenciasCrearSchema = Joi.object({
+    idEvento: Joi.number().integer().required()
+        .messages({
+            'any.required': 'El ID del evento es obligatorio.',
+            "number.base": "El ID del evento debe ser un número entero.",
+            "number.integer": "El ID del evento debe ser un número entero."
+        }),
+    idUsuario: Joi.number().integer().required()
+        .messages({
+            'any.required': 'El ID del usuario es obligatorio.',
+            "number.base": "El ID del usuario debe ser un número entero.",
+            "number.integer": "El ID del usuario debe ser un número entero."    
+        }),
+    nombres: Joi.string().max(100).required()
+        .messages({
+            'any.required': 'El nombre es obligatorio.',
+            "string.empty": "El nombre no puede estar vacío.",
+            "string.max": "El nombre no puede exceder los 100 caracteres."
+        }),
+    apellidos: Joi.string().max(100).required()
+        .messages({
+            'any.required': 'El apellidos es obligatorio.',
+            "string.empty": "El apellidos no puede estar vacío.",
+            "string.max": "El apellidos no puede exceder los 100 caracteres."
+        }),
+    correo: Joi.string().email().required()
+        .messages({
+            'any.required': 'El correo es obligatorio.',
+            "string.empty": "El correo no puede estar vacío.",
+            "string.email": "El correo debe ser un email válido."
+        }),
+    dni: Joi.string().length(8).pattern(/^\d{8}$/).required() // Exactamente 8 dígitos numéricos
+        .messages({
+            'any.required': 'El DNI es obligatorio.',
+            'string.empty': 'El DNI no puede estar vacío.',
+            'string.length': 'El DNI debe tener exactamente 8 caracteres.',
+            'string.pattern.base': 'El DNI debe contener solo números.'
+        }),
+    telefono: Joi.string().length(9).pattern(/^\d{9}$/).required() // Exactamente 9 dígitos numéricos
+        .messages({
+            'any.required': 'El teléfono es obligatorio.',
+            'string.empty': 'El teléfono no puede estar vacío.',
+            'string.length': 'El teléfono debe tener exactamente 9 dígitos.',
+            'string.pattern.base': 'El teléfono debe contener solo números.'
+        }),
+        
+})

@@ -7,7 +7,7 @@ export interface Pago {
     monto: number;
     fechaPago: Date;
     metodoPago: metodo_pago_enum;
-    estado: estado_pago_enum;
+    estado: estado_pago_enum;  
     estadoAuditoria?: string;
     fechaActualizacion?: Date;
 }

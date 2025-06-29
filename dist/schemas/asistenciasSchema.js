@@ -3,16 +3,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usuariosCrearSchema = void 0;
+exports.asistenciasCrearSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
-exports.usuariosCrearSchema = joi_1.default.object({
+exports.asistenciasCrearSchema = joi_1.default.object({
     idEvento: joi_1.default.number().integer().required()
         .messages({
         'any.required': 'El ID del evento es obligatorio.',
         "number.base": "El ID del evento debe ser un número entero.",
         "number.integer": "El ID del evento debe ser un número entero."
     }),
-    nombre: joi_1.default.string().max(100).required()
+    idUsuario: joi_1.default.number().integer().required()
+        .messages({
+        'any.required': 'El ID del usuario es obligatorio.',
+        "number.base": "El ID del usuario debe ser un número entero.",
+        "number.integer": "El ID del usuario debe ser un número entero."
+    }),
+    nombres: joi_1.default.string().max(100).required()
         .messages({
         'any.required': 'El nombre es obligatorio.',
         "string.empty": "El nombre no puede estar vacío.",
@@ -20,9 +26,9 @@ exports.usuariosCrearSchema = joi_1.default.object({
     }),
     apellidos: joi_1.default.string().max(100).required()
         .messages({
-        'any.required': 'Los apellidos son obligatorios.',
-        "string.empty": "Los apellidos no pueden estar vacíos.",
-        "string.max": "Los apellidos no pueden exceder los 100 caracteres."
+        'any.required': 'El apellidos es obligatorio.',
+        "string.empty": "El apellidos no puede estar vacío.",
+        "string.max": "El apellidos no puede exceder los 100 caracteres."
     }),
     correo: joi_1.default.string().email().required()
         .messages({
@@ -36,5 +42,12 @@ exports.usuariosCrearSchema = joi_1.default.object({
         'string.empty': 'El DNI no puede estar vacío.',
         'string.length': 'El DNI debe tener exactamente 8 caracteres.',
         'string.pattern.base': 'El DNI debe contener solo números.'
+    }),
+    telefono: joi_1.default.string().length(9).pattern(/^\d{9}$/).required() // Exactamente 9 dígitos numéricos
+        .messages({
+        'any.required': 'El teléfono es obligatorio.',
+        'string.empty': 'El teléfono no puede estar vacío.',
+        'string.length': 'El teléfono debe tener exactamente 9 dígitos.',
+        'string.pattern.base': 'El teléfono debe contener solo números.'
     }),
 });

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ResponseModel } from "../shared/resposeModel";
-import { STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
+import { STATUS_BAD_REQUEST, STATUS_INTERNAL_SERVER_ERROR } from "../shared/constants";
 import * as eventosService from "../services/asistencias.service";
+import { asistenciasCrearSchema } from "../schemas/asistenciasSchema";
 
 export const listarAsistencias = async (req: Request, res: Response) => {
     console.log("Listando asistencias...");
@@ -26,8 +27,12 @@ export const obtenerAsistencias = async (req: Request, res: Response) => {
     }
 }
 
-export const insertarAsistencias = async (req: Request, res: Response) => {
+export const insertarAsistencias = async (req: Request, res: Response) : Promise<any>  => {
     console.log("Insertando nueva asistencia...");
+    const {error}:any = asistenciasCrearSchema.validate(req.body);
+        if (error) {
+             return res.status(STATUS_BAD_REQUEST).json(ResponseModel.error(error.message, STATUS_BAD_REQUEST));
+        }
     try {
         const asistenciaCreada = await eventosService.insertarAsistencias(req.body);
         res.status(201).json(ResponseModel.success(asistenciaCreada));

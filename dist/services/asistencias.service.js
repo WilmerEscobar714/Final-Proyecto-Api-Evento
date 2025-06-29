@@ -12,10 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarAsistencias = exports.modificarAsistencias = exports.insertarAsistencias = exports.obtenerAsistencias = exports.listarAsistencias = void 0;
 const client_1 = require("@prisma/client");
 const constants_1 = require("../shared/constants");
+const asistencias_mapper_1 = require("../mappers/asistencias.mapper");
 const prisma = new client_1.PrismaClient();
 const listarAsistencias = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando asistencias");
-    return yield prisma.asistencias.findMany({
+    const asistencias = yield prisma.asistencias.findMany({
         where: {
             estado_auditoria: '1'
         },
@@ -23,6 +24,7 @@ const listarAsistencias = () => __awaiter(void 0, void 0, void 0, function* () {
             id_asistencia: 'asc'
         }
     });
+    return asistencias.map((asistencia) => (0, asistencias_mapper_1.fromPrismaAsistencias)(asistencia));
 });
 exports.listarAsistencias = listarAsistencias;
 const obtenerAsistencias = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,40 +34,25 @@ const obtenerAsistencias = (id) => __awaiter(void 0, void 0, void 0, function* (
             id_asistencia: id
         }
     });
-    return asistencia;
+    return asistencia ? (0, asistencias_mapper_1.fromPrismaAsistencias)(asistencia) : null;
 });
 exports.obtenerAsistencias = obtenerAsistencias;
 const insertarAsistencias = (asistencia) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nueva asistencia");
     yield prisma.asistencias.create({
-        data: {
-            id_evento: asistencia.id_evento,
-            id_usuario: asistencia.id_usuario,
-            nombres: asistencia.nombres,
-            apellidos: asistencia.apellidos,
-            correo: asistencia.correo,
-            dni: asistencia.dni,
-            telefono: asistencia.telefono
-        }
+        data: (0, asistencias_mapper_1.toPrismaAsistencias)(asistencia)
     });
     return constants_1.RESPONSE_INSERT_OK;
 });
 exports.insertarAsistencias = insertarAsistencias;
 const modificarAsistencias = (id, asistencia) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando asistencia");
+    const asistenciaActualizada = Object.assign({}, asistencia);
     yield prisma.asistencias.update({
         where: {
             id_asistencia: id
         },
-        data: {
-            id_evento: asistencia.id_evento,
-            id_usuario: asistencia.id_usuario,
-            nombres: asistencia.nombres,
-            apellidos: asistencia.apellidos,
-            correo: asistencia.correo,
-            dni: asistencia.dni,
-            telefono: asistencia.telefono
-        }
+        data: (0, asistencias_mapper_1.toPrismaAsistencias)(asistenciaActualizada)
     });
     return constants_1.RESPONSE_UPDATE_OK;
 });

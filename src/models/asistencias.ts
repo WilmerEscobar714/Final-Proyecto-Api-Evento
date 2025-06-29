@@ -1,13 +1,14 @@
 export interface Asistencia {
- id_asistencia: number;
- id_evento: number;
- id_usuario: number;
+ idAsistencia: number;
+ idEvento: number;
+ idUsuario: number;
  nombres: string;
  apellidos: string;
  correo: string;
  dni: string;
  telefono: string;
- asistio: string;
- estado_auditoria: string;
- fecha_registro: Date;
+ asistio?: string;
+ estadoAuditoria: string;
+ fechaRegistro: Date;
+ fecha_actualizacion: Date
 }

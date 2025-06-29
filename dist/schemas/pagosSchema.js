@@ -11,15 +11,15 @@ const EstadoPagoEnum = joi_1.default.string().valid('pendiente', 'pagado', 'canc
 exports.pagosCrearSchema = joi_1.default.object({
     idEvento: joi_1.default.number().integer().required()
         .messages({
-        'any.required': 'El ID de la categoría es obligatorio.',
-        "number.base": "El ID de la categoría debe ser un número entero.",
-        "number.integer": "El ID de la categoría debe ser un número entero."
+        'any.required': 'El ID del evento es obligatorio.',
+        "number.base": "El ID del evento debe ser un número entero.",
+        "number.integer": "El ID del evento debe ser un número entero."
     }),
     idUsuario: joi_1.default.number().integer().required()
         .messages({
-        'any.required': 'El ID de la categoría es obligatorio.',
-        "number.base": "El ID de la categoría debe ser un número entero.",
-        "number.integer": "El ID de la categoría debe ser un número entero."
+        'any.required': 'El ID del usuario es obligatorio.',
+        "number.base": "El ID del usuario debe ser un número entero.",
+        "number.integer": "El ID del usuario debe ser un número entero."
     }),
     monto: joi_1.default.number().precision(2).positive().required()
         .messages({

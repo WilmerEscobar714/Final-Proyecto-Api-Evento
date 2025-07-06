@@ -12,6 +12,7 @@ const eventos_routes_1 = __importDefault(require("./routes/eventos.routes"));
 const usuarios_routes_1 = __importDefault(require("./routes/usuarios.routes"));
 const asistencias_routes_1 = __importDefault(require("./routes/asistencias.routes"));
 const pagos_routes_1 = __importDefault(require("./routes/pagos.routes"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const app = (0, express_1.default)();
 //Base de datos
 //midler
@@ -23,5 +24,6 @@ app.use(`${env_1.default.API_PREFIX}/asistencias`, asistencias_routes_1.default)
 app.use(`${env_1.default.API_PREFIX}/eventos`, eventos_routes_1.default);
 app.use(`${env_1.default.API_PREFIX}/usuarios`, usuarios_routes_1.default);
 app.use(`${env_1.default.API_PREFIX}/pagos`, pagos_routes_1.default);
+app.use(`${env_1.default.API_PREFIX}/auth`, auth_routes_1.default);
 //Exportar por defecto 
 exports.default = app;

@@ -9,6 +9,7 @@ import EventoRoutes from './routes/eventos.routes';
 import UsuarioRoutes from './routes/usuarios.routes';
 import AsistenciaRoutes from './routes/asistencias.routes';
 import PagosRouters from './routes/pagos.routes';
+import authRouter from './routes/auth.routes';
 
 const app: Application = express();
 
@@ -23,6 +24,7 @@ app.use(`${env.API_PREFIX}/asistencias`, AsistenciaRoutes);
 app.use(`${env.API_PREFIX}/eventos`, EventoRoutes);
 app.use(`${env.API_PREFIX}/usuarios`, UsuarioRoutes);
 app.use(`${env.API_PREFIX}/pagos`, PagosRouters);
+app.use(`${env.API_PREFIX}/auth`, authRouter);
 
 
 //Exportar por defecto 

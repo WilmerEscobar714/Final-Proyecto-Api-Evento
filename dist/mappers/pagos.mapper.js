@@ -20,7 +20,8 @@ const toPrismaPagos = (pago) => {
         id_evento: pago.idEvento,
         id_usuario: pago.idUsuario,
         monto: pago.monto,
-        metodo_pago: pago.metodoPago
+        metodo_pago: pago.metodoPago,
+        estado: pago.estado
     };
 };
 exports.toPrismaPagos = toPrismaPagos;

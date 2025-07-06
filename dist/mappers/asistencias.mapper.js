@@ -11,6 +11,7 @@ const fromPrismaAsistencias = (asistencia) => {
         correo: asistencia.correo,
         dni: asistencia.dni,
         telefono: asistencia.telefono,
+        asistio: asistencia.asistio,
         estadoAuditoria: asistencia.estado_auditoria,
         fechaRegistro: asistencia.fecha_registro ? new Date(asistencia.fecha_registro) : null,
         fechaActualizacion: asistencia.fecha_actualizacion ? new Date(asistencia.fecha_actualizacion) : null,
@@ -25,7 +26,8 @@ const toPrismaAsistencias = (asistencias) => {
         apellidos: asistencias.apellidos,
         correo: asistencias.correo,
         dni: asistencias.dni,
-        telefono: asistencias.telefono
+        telefono: asistencias.telefono,
+        asistio: asistencias.asistio
     };
 };
 exports.toPrismaAsistencias = toPrismaAsistencias;

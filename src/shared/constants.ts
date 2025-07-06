@@ -10,3 +10,4 @@ export const STATUS_INTERNAL_SERVER_ERROR = 500;
 export const RESPONSE_INSERT_OK = 'Insertado satisfactoriamente';
 export const RESPONSE_UPDATE_OK = 'Modificado satisfactoriamente';
 export const RESPONSE_DELETE_OK = 'Eliminado satisfactoriamente';
+export const RESPONSE_CREDENCIALES_ERROR = 'Credenciales incorrectas';

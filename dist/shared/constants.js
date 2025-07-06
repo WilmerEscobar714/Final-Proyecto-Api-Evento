@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RESPONSE_DELETE_OK = exports.RESPONSE_UPDATE_OK = exports.RESPONSE_INSERT_OK = exports.STATUS_INTERNAL_SERVER_ERROR = exports.STATUS_NOT_FOUND = exports.STATUS_FORBIDDEN = exports.STATUS_UNAUTHORIZED = exports.STATUS_BAD_REQUEST = exports.STATUS_NO_CONTENT = exports.STATUS_CREATED = exports.STATUS_OK = void 0;
+exports.RESPONSE_CREDENCIALES_ERROR = exports.RESPONSE_DELETE_OK = exports.RESPONSE_UPDATE_OK = exports.RESPONSE_INSERT_OK = exports.STATUS_INTERNAL_SERVER_ERROR = exports.STATUS_NOT_FOUND = exports.STATUS_FORBIDDEN = exports.STATUS_UNAUTHORIZED = exports.STATUS_BAD_REQUEST = exports.STATUS_NO_CONTENT = exports.STATUS_CREATED = exports.STATUS_OK = void 0;
 exports.STATUS_OK = 200;
 exports.STATUS_CREATED = 201;
 exports.STATUS_NO_CONTENT = 204;
@@ -12,3 +12,4 @@ exports.STATUS_INTERNAL_SERVER_ERROR = 500;
 exports.RESPONSE_INSERT_OK = 'Insertado satisfactoriamente';
 exports.RESPONSE_UPDATE_OK = 'Modificado satisfactoriamente';
 exports.RESPONSE_DELETE_OK = 'Eliminado satisfactoriamente';
+exports.RESPONSE_CREDENCIALES_ERROR = 'Credenciales incorrectas';

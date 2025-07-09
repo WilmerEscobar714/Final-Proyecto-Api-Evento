@@ -6,7 +6,8 @@ import { fromPrismaCategoria, toPrismaCategoria } from "../mappers/categorias.ma
 const prisma = new PrismaClient();
 
 export const listarCategorias = async () => {
-    console.log("Listando categorias");;
+    console.log("Listando categorias");
+
     const categorias: categorias[] = await prisma.categorias.findMany({
         where: {
             estado_auditoria: '1'
@@ -20,6 +21,16 @@ export const listarCategorias = async () => {
 
 export const obtenerCategorias = async(id:number)=> {
     console.log("Obteniendo categoria por ID");
+
+    // Verificar si la categoria existe antes de intentar obtenerlo
+    const categoriaExistente = await prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+
+    if (!categoriaExistente) {
+        throw new Error(`La categoria con ID ${id} no existe.`);
+    }
+
     const categoria: categorias | null = await prisma.categorias.findUnique({
         where: {
             id_categoria: id
@@ -39,6 +50,16 @@ export const insertarCategorias = async(categoria: Categoria) => {
 export const modificarCategorias = async(id: number, categoria: Categoria) => {
     console.log("Modificando categoria");
 
+    
+     //Verificar si la categoria existe antes de modificarla
+    const categoriaExistente = await prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+
+    if (!categoriaExistente) {
+        throw new Error(`La categoria con ID ${id} no existe.`);
+    }
+
     const dataActualizada={...categoria};
     
     await prisma.categorias.update({
@@ -52,6 +73,16 @@ export const modificarCategorias = async(id: number, categoria: Categoria) => {
 
 export const eliminarCategorias = async(id: number) => {
     console.log("Eliminando categoria");
+
+     // Verificar si la categoria existe antes de intentar eliminar
+    const categoriaExistente = await prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+
+    if (!categoriaExistente) {
+        throw new Error(`La categoria con ID ${id} no existe.`);
+    }
+
     await prisma.categorias.update({
         where: {
             id_categoria: id

@@ -16,7 +16,6 @@ const categorias_mapper_1 = require("../mappers/categorias.mapper");
 const prisma = new client_1.PrismaClient();
 const listarCategorias = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Listando categorias");
-    ;
     const categorias = yield prisma.categorias.findMany({
         where: {
             estado_auditoria: '1'
@@ -30,6 +29,13 @@ const listarCategorias = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.listarCategorias = listarCategorias;
 const obtenerCategorias = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Obteniendo categoria por ID");
+    // Opcional: Verificar si la categoria existe antes de intentar obtenerlo
+    const categoriaExistente = yield prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+    if (!categoriaExistente) {
+        throw new Error(`El médico con ID ${id} no existe.`);
+    }
     const categoria = yield prisma.categorias.findUnique({
         where: {
             id_categoria: id
@@ -48,6 +54,13 @@ const insertarCategorias = (categoria) => __awaiter(void 0, void 0, void 0, func
 exports.insertarCategorias = insertarCategorias;
 const modificarCategorias = (id, categoria) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando categoria");
+    // Opcional: Verificar si la categoria existe antes de modificar
+    const categoriaExistente = yield prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+    if (!categoriaExistente) {
+        throw new Error(`El médico con ID ${id} no existe.`);
+    }
     const dataActualizada = Object.assign({}, categoria);
     yield prisma.categorias.update({
         where: {
@@ -60,6 +73,13 @@ const modificarCategorias = (id, categoria) => __awaiter(void 0, void 0, void 0,
 exports.modificarCategorias = modificarCategorias;
 const eliminarCategorias = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Eliminando categoria");
+    // Opcional: Verificar si la categoria existe antes de intentar eliminar
+    const categoriaExistente = yield prisma.categorias.findUnique({
+        where: { id_categoria: id }
+    });
+    if (!categoriaExistente) {
+        throw new Error(`El médico con ID ${id} no existe para eliminar.`);
+    }
     yield prisma.categorias.update({
         where: {
             id_categoria: id

@@ -1,2 +1,2 @@
 <h1>API DE EVENTOS</h1>
-<h4>Descripción</h4>
+<h3>Descripción</h3>

@@ -123,14 +123,37 @@ router.post('/', auth_midleware_1.authMiddleware, pagos_controller_1.insertarPag
  *                 type: string
  *     responses:
  *       200:
- *         description: Usuario actualizado correctamente
+ *         description: Pago actualizado correctamente
  *       400:
  *         description: Datos inválidos
  *       401:
  *         description: No autorizado
  *       404:
- *         description: Usuario no encontrado
+ *         description: Pago no encontrado
  */
 router.put('/:id', auth_midleware_1.authMiddleware, pagos_controller_1.modificarPagos);
+/**
+ * @swagger
+ * /api/v1/pagos/{id}:
+ *   delete:
+ *     summary: Eliminar un pago por ID
+ *     tags: [Pagos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del pago a eliminar
+ *     responses:
+ *       200:
+ *         description: Pago eliminado correctamente
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *         description: Pago no encontrado
+ */
 router.delete('/:id', auth_midleware_1.authMiddleware, pagos_controller_1.eliminarPagos);
 exports.default = router;

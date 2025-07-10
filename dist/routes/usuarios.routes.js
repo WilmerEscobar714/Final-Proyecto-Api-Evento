@@ -156,11 +156,11 @@ router.put('/:id', auth_midleware_1.authMiddleware, usuarios_controller_1.modifi
  *         description: ID del evento a eliminar
  *     responses:
  *       200:
- *         description: Evento eliminado correctamente
+ *         description: Usuario eliminado correctamente
  *       401:
  *         description: No autorizado
  *       404:
- *         description: Evento no encontrado
+ *         description: Usuario no encontrado
  */
 router.delete('/:id', auth_midleware_1.authMiddleware, usuarios_controller_1.eliminarUsuarios);
 exports.default = router;

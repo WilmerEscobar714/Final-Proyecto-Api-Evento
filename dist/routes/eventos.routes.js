@@ -11,7 +11,7 @@ const router = express_1.default.Router();
  * @swagger
  * tags:
  *   - name: Eventos
- *     description: Gestion de Eventos y Asistencias
+ *     description: Gestion de Eventos
  */
 /**
  * @swagger

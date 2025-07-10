@@ -20,3 +20,11 @@
 -	Postman para pruebas.
 
 -	GitHub
+
+<h3>✅ Instrucciones de instalación y ejecución</h3>
+
+🔧 Requisitos previos
+
+
+
+<h3>📌 Rutas principales de la API</h3>

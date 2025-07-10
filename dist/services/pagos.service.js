@@ -29,6 +29,13 @@ const listarPagos = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.listarPagos = listarPagos;
 const obtenerPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Obteniendo pago por ID");
+    // Verificar si el pago existe antes de intentar obtenerlo
+    const pagoExistente = yield prisma.pagos.findUnique({
+        where: { id_pago: id }
+    });
+    if (!pagoExistente) {
+        throw new Error(`El pago con ID ${id} no existe.`);
+    }
     const pago = yield prisma.pagos.findUnique({
         where: {
             id_pago: id
@@ -39,6 +46,18 @@ const obtenerPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
 exports.obtenerPagos = obtenerPagos;
 const insertarPagos = (pago) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo pago");
+    // Validar si el evento existe
+    const pagoEvento = yield verificarEventoExistente(pago.idEvento);
+    if (!pagoEvento) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El evento con ID ${pago.idEvento} no existe.`);
+    }
+    // Validar si el usuario existe
+    const pagosUsuario = yield verificarUsuarioExistente(pago.idUsuario);
+    if (!pagosUsuario) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El usuario con ID ${pago.idUsuario} no existe.`);
+    }
     yield prisma.pagos.create({
         data: (0, pagos_mapper_1.toPrismaPagos)(pago)
     });
@@ -47,6 +66,26 @@ const insertarPagos = (pago) => __awaiter(void 0, void 0, void 0, function* () {
 exports.insertarPagos = insertarPagos;
 const modificarPagos = (id, pago) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando pago");
+    // Verificar si el pago existe antes de intentar modificarlo
+    const pagoExistente = yield prisma.pagos.findUnique({
+        where: { id_pago: id }
+    });
+    if (!pagoExistente) {
+        throw new Error(`El pago con ID ${id} no existe.`);
+    }
+    // Luego, valida si el evento  existe 
+    // Se asume que idEvento es obligatorio para modificar, si no, deberías hacer un chequeo de `if (pago.idEvento)`
+    const pagoEvento = yield verificarEventoExistente(pago.idEvento);
+    if (!pagoEvento) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El evento con ID ${pago.idEvento} no existe.`);
+    }
+    // Validar si el usuario existe
+    const pagosUsuario = yield verificarUsuarioExistente(pago.idUsuario);
+    if (!pagosUsuario) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El usuario con ID ${pago.idUsuario} no existe.`);
+    }
     const pagoActualizado = Object.assign({}, pago);
     yield prisma.pagos.update({
         where: {
@@ -59,6 +98,13 @@ const modificarPagos = (id, pago) => __awaiter(void 0, void 0, void 0, function*
 exports.modificarPagos = modificarPagos;
 const eliminarPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Eliminando pago");
+    // Verificar si el pago existe antes de intentar eliminarlo
+    const pagoExistente = yield prisma.pagos.findUnique({
+        where: { id_pago: id }
+    });
+    if (!pagoExistente) {
+        throw new Error(`El pago con ID ${id} no existe.`);
+    }
     yield prisma.pagos.update({
         where: {
             id_pago: id
@@ -70,3 +116,21 @@ const eliminarPagos = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return constants_1.RESPONSE_DELETE_OK;
 });
 exports.eliminarPagos = eliminarPagos;
+// NUEVA FUNCIÓN DE AYUDA para validar la existencia del evento
+const verificarEventoExistente = (id_evento) => __awaiter(void 0, void 0, void 0, function* () {
+    const evento = yield prisma.eventos.findUnique({
+        where: {
+            id_evento: id_evento,
+        },
+    });
+    return evento;
+});
+// NUEVA FUNCIÓN DE AYUDA para validar la existencia del usuarios
+const verificarUsuarioExistente = (id_usuario) => __awaiter(void 0, void 0, void 0, function* () {
+    const usu = yield prisma.usuarios.findUnique({
+        where: {
+            id_usuario: id_usuario,
+        },
+    });
+    return usu;
+});

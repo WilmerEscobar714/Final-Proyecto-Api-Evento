@@ -29,6 +29,13 @@ const listarUsuarios = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.listarUsuarios = listarUsuarios;
 const obtenerUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Obteniendo usuario por ID");
+    // Verificar si el usuario existe antes de intentar obtenerlo
+    const usuarioExistente = yield prisma.usuarios.findUnique({
+        where: { id_usuario: id }
+    });
+    if (!usuarioExistente) {
+        throw new Error(`El Usuario con ID ${id} no existe.`);
+    }
     const usuario = yield prisma.usuarios.findUnique({
         where: {
             id_usuario: id
@@ -39,6 +46,12 @@ const obtenerUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () {
 exports.obtenerUsuarios = obtenerUsuarios;
 const insertarUsuarios = (usuario) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Insertando nuevo usuario");
+    // Validar si el evento existe
+    const usuarios = yield verificarEventoExistente(usuario.idEvento);
+    if (!usuarios) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El evento con ID ${usuario.idEvento} no existe.`);
+    }
     yield prisma.usuarios.create({
         data: (0, usuarios_mapper_1.toPrismaUsuario)(usuario)
     });
@@ -47,6 +60,20 @@ const insertarUsuarios = (usuario) => __awaiter(void 0, void 0, void 0, function
 exports.insertarUsuarios = insertarUsuarios;
 const modificarUsuarios = (id, usuario) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Modificando usuario");
+    // Verificar si el usuario existe antes de intentar modificarlo
+    const usuarioExistente = yield prisma.usuarios.findUnique({
+        where: { id_usuario: id }
+    });
+    if (!usuarioExistente) {
+        throw new Error(`El Usuario con ID ${id} no existe.`);
+    }
+    // Luego, valida si el evento  existe 
+    // Se asume que idEvento es obligatorio para modificar, si no, deberías hacer un chequeo de `if (usuario.idEvento)`
+    const usuarios = yield verificarEventoExistente(usuario.idEvento);
+    if (!usuarios) {
+        // Lanza un error que el controlador pueda capturar
+        throw new Error(`El evento con ID ${usuario.idEvento} no existe.`);
+    }
     const usuarioActualizado = Object.assign({}, usuario);
     yield prisma.usuarios.update({
         where: {
@@ -59,6 +86,13 @@ const modificarUsuarios = (id, usuario) => __awaiter(void 0, void 0, void 0, fun
 exports.modificarUsuarios = modificarUsuarios;
 const eliminarUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Eliminando usuario");
+    // Verificar si el usuario existe antes de intentar eliminarlo
+    const usuarioExistente = yield prisma.usuarios.findUnique({
+        where: { id_usuario: id }
+    });
+    if (!usuarioExistente) {
+        throw new Error(`El Usuario con ID ${id} no existe.`);
+    }
     yield prisma.usuarios.update({
         where: {
             id_usuario: id
@@ -70,3 +104,12 @@ const eliminarUsuarios = (id) => __awaiter(void 0, void 0, void 0, function* () 
     return constants_1.RESPONSE_DELETE_OK;
 });
 exports.eliminarUsuarios = eliminarUsuarios;
+// NUEVA FUNCIÓN DE AYUDA para validar la existencia del evento
+const verificarEventoExistente = (id_evento) => __awaiter(void 0, void 0, void 0, function* () {
+    const evento = yield prisma.eventos.findUnique({
+        where: {
+            id_evento: id_evento,
+        },
+    });
+    return evento;
+});

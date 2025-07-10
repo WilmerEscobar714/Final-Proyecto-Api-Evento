@@ -5,4 +5,17 @@
 
 <h3>🧰 Tecnologías Utilizadas</h3>
 - Backend: Node.js + TypeScript.
+
 -	Framework: Express.
+
+-	ORM / DB : Prisma.
+
+-	Base de datos: PostgresSQL.
+
+-	Seguridad: Cors para restringir las solicitudes HTTP entre orígenes distintos.
+
+-	Validación de datos: Usamos el joi para validación de datos que permite definir planos o esquemas.
+
+-	Postman para pruebas.
+
+-	GitHub

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = exports.loginAuth = void 0;
+exports.deleteUser = exports.getUserById = exports.listUsers = exports.registerUser = exports.loginAuth = void 0;
 const constants_1 = require("../shared/constants");
 const jwt_1 = require("./jwt");
 const client_1 = require("@prisma/client");
@@ -65,3 +65,76 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.registerUser = registerUser;
+const listUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Obtener todos los usuarios, seleccionando solo id, username y role para evitar exponer la contraseña
+        const users = yield prisma.users.findMany({
+            select: {
+                id: true,
+                username: true,
+                password: true,
+                role: true,
+            },
+        });
+        res.status(constants_1.STATUS_OK).json(resposeModel_1.ResponseModel.success(users, 'Usuarios listados exitosamente'));
+    }
+    catch (error) {
+        res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error('Error al listar usuarios'));
+    }
+});
+exports.listUsers = listUsers;
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params; // Suponiendo que el ID viene en los parámetros de la URL
+    try {
+        // Primero, verifica si el usuario existe antes de intentar obtenerlo
+        const existingUser = yield prisma.users.findUnique({
+            where: { id: parseInt(id) },
+        });
+        if (!existingUser) {
+            res.status(constants_1.STATUS_NOT_FOUND).json(resposeModel_1.ResponseModel.error('Usuario no encontrado'));
+            return;
+        }
+        const user = yield prisma.users.findUnique({
+            where: { id: parseInt(id) }, // Asegúrate de que el ID sea un número
+            select: {
+                id: true,
+                username: true,
+                password: true,
+                role: true,
+            },
+        });
+        if (!user) {
+            res.status(constants_1.STATUS_NOT_FOUND).json(resposeModel_1.ResponseModel.error('Usuario no encontrado'));
+            return;
+        }
+        res.status(constants_1.STATUS_OK).json(resposeModel_1.ResponseModel.success(user, 'Usuario obtenido exitosamente'));
+    }
+    catch (error) {
+        res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error('Error al obtener usuario'));
+    }
+});
+exports.getUserById = getUserById;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        // Primero, verifica si el usuario existe antes de intentar eliminarlo
+        const existingUser = yield prisma.users.findUnique({
+            where: { id: parseInt(id) },
+        });
+        if (!existingUser) {
+            res.status(constants_1.STATUS_NOT_FOUND).json(resposeModel_1.ResponseModel.error('Usuario no encontrado'));
+            return;
+        }
+        // Elimina el usuario de la base de datos
+        yield prisma.users.delete({
+            where: { id: parseInt(id) },
+        });
+        // Envía una respuesta 200 OK con un mensaje de éxito
+        res.status(constants_1.STATUS_OK).json(resposeModel_1.ResponseModel.success(null, 'Usuario eliminado satisfactoriamente'));
+    }
+    catch (error) {
+        // En caso de error, puedes devolver un 400 Bad Request
+        res.status(constants_1.STATUS_BAD_REQUEST).json(resposeModel_1.ResponseModel.error('Error al eliminar usuario'));
+    }
+});
+exports.deleteUser = deleteUser;

@@ -1,7 +1,7 @@
 import express, {Router } from "express";
 import { loginAuth } from "../auth/auth.controller";
 import { authMiddleware } from "../auth/auth.midleware";
-import { registerUser } from "../auth/auth.service";
+import { deleteUser, getUserById, listUsers, registerUser } from "../auth/auth.service";
 
 const router: Router = express.Router();
 
@@ -70,4 +70,66 @@ router.get('/perfil', authMiddleware, (req, res) => {
   const user = (req as any).user;
   res.json({ message: 'Usuario autenticado', user });
 });
+
+/**
+ * @swagger
+ * /api/v1/auth/users:
+ *   get:
+ *     summary: Listar todos los users
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista obtenida correctamente
+ */
+
+router.get('/users', authMiddleware, listUsers);
+
+/**
+ * @swagger
+ * /api/v1/auth/users/{id}:
+ *   get:
+ *     summary: Obtener un User por ID
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del User a obtener
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User obtenido correctamente
+ */
+router.get('/users/:id', authMiddleware, getUserById);
+
+/**
+ * @swagger
+ * /api/v1/auth/users/{id}:
+ *   delete:
+ *     summary: Eliminar un user por ID
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de user a eliminar
+ *     responses:
+ *       200:
+ *         description: User eliminada correctamente
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *         description: User no encontrado
+ */
+router.delete('/users/:id', authMiddleware, deleteUser);
+
 export default router;

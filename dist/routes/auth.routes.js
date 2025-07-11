@@ -67,4 +67,61 @@ router.get('/perfil', auth_midleware_1.authMiddleware, (req, res) => {
     const user = req.user;
     res.json({ message: 'Usuario autenticado', user });
 });
+/**
+ * @swagger
+ * /api/v1/auth/users:
+ *   get:
+ *     summary: Listar todos los users
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista obtenida correctamente
+ */
+router.get('/users', auth_midleware_1.authMiddleware, auth_service_1.listUsers);
+/**
+ * @swagger
+ * /api/v1/auth/users/{id}:
+ *   get:
+ *     summary: Obtener un User por ID
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del User a obtener
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User obtenido correctamente
+ */
+router.get('/users/:id', auth_midleware_1.authMiddleware, auth_service_1.getUserById);
+/**
+ * @swagger
+ * /api/v1/auth/users/{id}:
+ *   delete:
+ *     summary: Eliminar un user por ID
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de user a eliminar
+ *     responses:
+ *       200:
+ *         description: User eliminada correctamente
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *         description: User no encontrado
+ */
+router.delete('/users/:id', auth_midleware_1.authMiddleware, auth_service_1.deleteUser);
 exports.default = router;

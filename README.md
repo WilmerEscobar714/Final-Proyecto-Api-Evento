@@ -129,7 +129,7 @@ http://localhost:3000/api/v1/api-docs/#/  -- falta poner url correcta
 Postman 
 
 ```bash
-falta poner 
+https://documenter.getpostman.com/view/40887593/2sB34fmLuV
  ```
 
 

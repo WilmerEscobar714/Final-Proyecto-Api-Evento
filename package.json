@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {  
-     "dev": "tsnd --respawn --clear src/server.ts",
+
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && node dist/server.js",
-    "build": "tsc"
+    "build": "node --no-warnings ./node_modules/typescript/bin/tsc",
+    "dev": "ts-node-dev --respawn --clear src/server.ts",
+    "postinstall": "npx prisma migrate deploy"
+
   },
   "keywords": [],
   "author": "",

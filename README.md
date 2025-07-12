@@ -191,6 +191,76 @@ Esta ruta crea un token de usuario.
 }
 ```
 
+### GET /api/v1/auth/users
+
+Esta ruta lista todos los usuarios.
+
+**Ejemplo de Respuesta Exitosa (200 OK):**
+
+```json
+{
+  "success": true,
+  "message": "Usuarios listados exitosamente",
+  "status": 200,
+  "data": [
+    {
+      "id": 1,
+      "username": "wilmer",
+      "password": "$2b$10$LuhPl4Sa3k2hzkwDDj3aaOTfdNawh3EFrVqUdPN81po3B8ahAKtMm",
+      "role": "ADMINISTRADOR"
+    },
+    {
+      "id": 2,
+      "username": "juan",
+      "password": "$2b$10$mn6I0fsMegtN7rYhI85k0uW3WGyIJKGrUiOGBYE0HYh6rLa0shj72",
+      "role": "ADMINISTRADOR"
+    }
+  ]
+}
+```
+
+### GET /api/v1/auth/users/1
+
+Esta ruta obtiene un usr por ID.
+
+**Parámetro de ruta:**
+
+* `id`: ID del user a obtener.
+  
+**Ejemplo de Respuesta Exitosa (200 OK):**
+```json
+{
+  "success": true,
+  "message": "Usuario obtenido exitosamente",
+  "status": 200,
+  "data": {
+    "id": 1,
+    "username": "wilmer",
+    "password": "$2b$10$LuhPl4Sa3k2hzkwDDj3aaOTfdNawh3EFrVqUdPN81po3B8ahAKtMm",
+    "role": "ADMINISTRADOR"
+  }
+}
+```
+
+### DELETE /api/v1/auth/users/1
+
+Esta ruta elimina un user por ID.
+
+**Parámetro de ruta:**
+
+* `id`: ID del user a eliminar.
+  
+**Ejemplo de Respuesta Exitosa (200 OK):**
+  
+```json
+{
+  "success": true,
+  "message": "Usuario eliminado satisfactoriamente",
+  "status": 200,
+  "data": null
+}
+```
+
 ## Categorías
 
 ### POST /api/v1/categorias

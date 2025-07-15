@@ -9,8 +9,9 @@
     "start": "npm run build && node dist/server.js",
     "build": "node --no-warnings ./node_modules/typescript/bin/tsc",
     "dev": "ts-node-dev --respawn --clear src/server.ts",
-    "postinstall": "npx prisma migrate deploy"
-    
+    "prisma:deploy": "npx prisma migrate deploy",
+    "postinstall": "npm run prisma:deploy"
+
   },
   "keywords": [],
   "author": "",

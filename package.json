@@ -11,6 +11,7 @@
     "dev": "ts-node-dev --respawn --clear src/server.ts",
     "prisma:deploy": "npx prisma migrate deploy",
     "postinstall": "npm run prisma:deploy"
+    
 
   },
   "keywords": [],
